@@ -3,15 +3,19 @@ import {useState} from 'react'
 import Title from './components/Title'
 import Modal from './components/Modal'
 import EventList from './components/EventList';
+import NewEventForm from './components/NewEventForm';
 
 function App() {
   const [showModal, setShowModals] = useState(true)
   const [showEvents, setShowEvents] = useState(true)
-  const [events, setEvents] = useState([
-    {title: "mario's birthday bash", id: 1},
-    {title: "bowser's live stream", id: 2},
-    {title: "race on momo farm", id: 3}
-  ])
+  const [events, setEvents] = useState([])
+
+  const addEvent = (event) => {
+    setEvents((prevEvents) => {
+      return [...prevEvents, event]
+    })
+    setShowModals(false)
+  }
 
   const handleClick = (id) => {
     setEvents((prevEvents) => {
@@ -22,10 +26,6 @@ function App() {
     console.log(id)
   }
 
-  const handleClose = () => {
-    setShowModals(false)
-  }
-  
   const subtitle = "All the latest event in Marioland"
 
   return (
@@ -39,7 +39,7 @@ function App() {
       {!showEvents && (
       <div>
         <button onClick={() => setShowEvents(true)}>show events</button>
-      </div>
+      </div> 
       )}
    
       {showEvents && <EventList events={events} handleClick={handleClick}/>}
@@ -47,16 +47,12 @@ function App() {
         <h2>10% Off Coupon Code!!</h2>
         <p>Use the code NINJA10 at the checkout.</p>
       </Modal> */}
-      {showModal &&
-        <Modal handleClose={handleClose} isSalesModal={true}>
-          <h2>Terms and Conditions</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-            Error odit nam et reprehenderit quibusdam temporibus officia dolorum quo sint nemo quis, 
-            laborum, quasi nisi fugit praesentium debitis repudiandae! Sapiente, omnis.</p>
+      {showModal && <Modal isSalesModal={true}>
+          <NewEventForm addEvent={addEvent}/>
         </Modal>
       }
       <div>
-        <button onClick={() => setShowModals(true)}>show modal</button>
+        <button onClick={() => setShowModals(true)}>Add New Event</button>
       </div>
     
     </div>
